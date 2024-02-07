@@ -49,10 +49,10 @@ def add_member(driver, page, member_list, my_group):
 
             try:
                 number_bx = driver.find_element(By.XPATH, xps.select_number_to_add_xpath)
-                number = number_bx.text.replace(" ", "")
-                number = number.replace("+", "")
-                if number == num:
-                    number_bx.click()
+                # number = number_bx.text.replace(" ", "")
+                # number = number.replace("+", "")
+                # if number == num:
+                number_bx.click()
             except Exception as e:
                 lv.controls.append(ft.Text(str(e)))
                 page.update()
@@ -105,7 +105,7 @@ def add_member(driver, page, member_list, my_group):
         pass
     try:
         driver.refresh()
-        lv.controls.append(ft.Text("Added Completed."))
+        lv.controls.append(ft.Text("Added to Group Completed."))
         page.remove(progress_column)
         page.update()
         page.add(lv)

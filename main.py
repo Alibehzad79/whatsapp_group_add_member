@@ -8,15 +8,40 @@ from datetime import datetime
 
 
 def main(page: ft.Page):
+    global driver
     """app title"""
     page.title = "WhatsApp add Member to group"
 
     """ start app function """
     lv = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+    """progress to open webdriver"""
+    try:
+        progress_bar = ft.Column([ft.Text("Opening Browser..."), ft.ProgressBar()])
+        page.add(progress_bar)
+        driver = webdriver.Firefox()
+        page.remove(progress_bar)
+        page.update()
+    except Exception as e:
+        lv.controls.append(ft.Text(str(e)))
+        page.update()
+        lv.clean()
 
     def start(e):
+        global driver
+        if not driver:
+            try:
+                progress_bar = ft.Column(
+                    [ft.Text("Opening Browser..."), ft.ProgressBar()]
+                )
+                page.add(progress_bar)
+                driver = webdriver.Firefox()
+                page.remove(progress_bar)
+                page.update()
+            except Exception as e:
+                lv.controls.append(ft.Text(str(e)))
+                page.update()
+                lv.clean()
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        lv.clean()
         try:
             ex_member = extract_members(
                 page=page, driver=driver, target_group=target_group.value
@@ -36,11 +61,11 @@ def main(page: ft.Page):
                     page.update()
                     for member in ex_member:
                         new_member.write(str(member) + "\n")
-                        lv.controls.append(ft.Text(f"{str(member)} added."))
+                        lv.controls.append(ft.Text(f"{str(member)} added to List."))
                         page.update()
                     new_member.close()
                     page.remove(progress_column)
-                    lv.controls.append(ft.Text("Members added Completed."))
+                    lv.controls.append(ft.Text("Members added to List Completed."))
                     page.update()
                 except Exception as e:
                     lv.controls.append(ft.Text(str(e)))
@@ -64,7 +89,7 @@ def main(page: ft.Page):
                 add_member(
                     driver=driver,
                     page=page,
-                    member_list=["989148698641", "989222189357"],
+                    member_list=ex_member,
                     my_group=my_group.value,
                 )
                 lv.controls.append(f"Member added to {my_group.value}")
@@ -74,17 +99,6 @@ def main(page: ft.Page):
         else:
             lv.controls.append(ft.Text("Member List is Empty.", color=ft.colors.RED))
             page.update()
-
-    """ progress to open webdriver """
-    try:
-        progress_ring = ft.ProgressRing()
-        page.add(progress_ring)
-        driver = webdriver.Firefox()
-        page.remove(progress_ring)
-        page.update()
-    except Exception as e:
-        lv.controls.append(ft.Text(str(e)))
-        page.update()
 
     """ input forms """
     target_group = ft.TextField(label="نام گروه هدف")
