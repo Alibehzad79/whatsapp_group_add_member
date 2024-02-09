@@ -12,12 +12,12 @@ lv = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
 def sub(driver, page, target_group):
     try:
         driver.get(BASE_URL)
+        lv.controls.append(ft.Text("Sleeping for 60 second.", color=ft.colors.GREEN))
+        page.update()
+        time.sleep(60)
     except Exception as e:
         lv.controls.append(ft.Text(BASE_ERROR))
         page.update()
-    page.add(ft.Text("Sleeping for 60 second.", color=ft.colors.GREEN))
-    page.update()
-    time.sleep(60)
     try:
         driver.find_element(By.XPATH, xps.search_box_xpath).click()
         time.sleep(10)
@@ -44,3 +44,4 @@ def sub(driver, page, target_group):
     except Exception as e:
         lv.controls.append(ft.Text(BASE_ERROR))
         page.update()
+    page.add(lv)

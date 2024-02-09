@@ -19,7 +19,7 @@ def extract_members(page, driver, target_group):
         final_members = remove_space.replace("+", "")
         member_list = final_members.split(",")
         time.sleep(10)
-        page.add(ft.Text("Extracing Done", color=ft.colors.GREEN))
+        lv.controls.append(ft.Text("Extracing Done", color=ft.colors.GREEN))
     except Exception as e:
         lv.controls.append(ft.Text(BASE_ERROR))
         page.update()
